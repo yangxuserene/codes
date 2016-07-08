@@ -46,6 +46,7 @@ char file_name_of_job[5][8192];
 
 struct codes_jobmap_ctx *jobmap_ctx;
 struct codes_jobmap_params_list jobmap_p;
+int msg_size_scale = 100;
 /* Xu's additions end */
 
 typedef struct nw_state nw_state;
@@ -743,8 +744,8 @@ static void codes_exec_mpi_recv(
    receive operations. */
 
     if(s->app_id == 0){
-        mpi_op->u.send.num_bytes *= 10;
-        mpi_op->u.recv.num_bytes *= 10;
+        /** mpi_op->u.send.num_bytes *= msg_size_scale; */
+        mpi_op->u.recv.num_bytes *= msg_size_scale;
     }
 
 	m->rc.saved_recv_time = s->recv_time;
@@ -805,8 +806,8 @@ static void codes_exec_mpi_send(nw_state* s,
 {
 
     if(s->app_id == 0){
-        mpi_op->u.send.num_bytes *= 10;
-        mpi_op->u.recv.num_bytes *= 10;
+        mpi_op->u.send.num_bytes *= msg_size_scale;
+        /** mpi_op->u.recv.num_bytes *= msg_size_scale; */
     }
 
 	/* model-net event */
