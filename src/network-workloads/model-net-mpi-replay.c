@@ -1307,7 +1307,7 @@ static void get_next_mpi_operation(nw_state* s, tw_bf * bf, nw_message * m, tw_l
 
         if(mpi_op.op_type == CODES_WK_END)
         {
-            s->elapsed_time = tw_now(lp) - s->start_time;
+        s->elapsed_time = tw_now(lp) - s->start_time;
             return;
         }
 		switch(mpi_op.op_type)
@@ -1384,6 +1384,11 @@ void nw_test_finalize(nw_state* s, tw_lp* lp)
     if(!s->nw_id)
         written = sprintf(s->output_buf, "# Format <LP ID> <Terminal ID> <Total sends> <Total Recvs> <Bytes sent> <Bytes recvd> <Send time> <Comm. time> <Compute time>");
 
+    if(s->wait_op)
+    {
+        printf("\n Incomplete wait operation Rank %ld ", s->nw_id);
+        print_waiting_reqs(s->wait_op->req_ids, s->wait_op->count);
+    }
     if(alloc_spec == 1)
     {
         struct codes_jobmap_id lid;
@@ -1418,9 +1423,9 @@ void nw_test_finalize(nw_state* s, tw_lp* lp)
             fwrite(s->mpi_wkld_samples, sizeof(struct mpi_workload_sample), s->sampling_indx + 1, workload_agg_log);
         }
         sample_bytes_written += (s->sampling_indx * sizeof(struct mpi_workload_sample));
-		/*if(s->wait_time > max_wait_time)
+		if(s->wait_time > max_wait_time)
 			max_wait_time = s->wait_time;
-        */
+        
 		if(s->send_time > max_send_time)
 			max_send_time = s->send_time;
 
