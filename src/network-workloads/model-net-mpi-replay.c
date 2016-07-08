@@ -742,6 +742,11 @@ static void codes_exec_mpi_recv(
    If no matching isend is found, the receive operation is queued in the pending queue of
    receive operations. */
 
+    if(s->app_id == 0){
+        mpi_op->u.send.num_bytes *= 10;
+        mpi_op->u.recv.num_bytes *= 10;
+    }
+
 	m->rc.saved_recv_time = s->recv_time;
     m->rc.saved_num_bytes = mpi_op->u.recv.num_bytes;
 
@@ -798,6 +803,12 @@ static void codes_exec_mpi_send(nw_state* s,
         tw_lp* lp, 
         struct codes_workload_op * mpi_op)
 {
+
+    if(s->app_id == 0){
+        mpi_op->u.send.num_bytes *= 10;
+        mpi_op->u.recv.num_bytes *= 10;
+    }
+
 	/* model-net event */
     int global_dest_rank = mpi_op->u.send.dest_rank;
     
