@@ -46,7 +46,7 @@ char file_name_of_job[5][8192];
 
 struct codes_jobmap_ctx *jobmap_ctx;
 struct codes_jobmap_params_list jobmap_p;
-int msg_size_scale = 100;
+int msg_size_scale = 1;
 /* Xu's additions end */
 
 typedef struct nw_state nw_state;
